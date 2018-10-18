@@ -154,13 +154,13 @@ typedef enum {
 	MOVE_X,
 	MOVE_Y,
 	DONE,
-	PRESS_A,
-	UNPRESS_A,
+	PRESS_B,
+	UNPRESS_B,
 	WAITING,
 	HODL,
 	WAITUART,
 	CONNECT,
-	PRESSY
+	PRESS_Y
 } State_t;
 State_t state = SYNC_CONTROLLER;
 
@@ -214,16 +214,16 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 			/*if (report_count > 100)
 			{
 				report_count = 0;
-				state = PRESS_A;
+				state = PRESS_B;
 			}
 			report_count++;
 			break;*/
 
-		case PRESSY:
+		case PRESS_Y:
 			ReportData->Button |= SWITCH_Y;
-			state = UNPRESS_A;
+			state = UNPRESS_B;
 			break;
-		case PRESS_A:
+		case PRESS_B:
 			ReportData->Button |= SWITCH_B;
 			state = HODL;
 			break;
@@ -233,7 +233,7 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 			_delay_ms(500);
 			state = WAITUART;
 			break;
-		case UNPRESS_A:
+		case UNPRESS_B:
 			state = WAITING;
 			break;
 		case WAITING:
@@ -245,32 +245,45 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 			break;
 		case WAITUART:
 			 c = uart_getchar();
-			if (c == 'u') {
-				ReportData->LY = STICK_MIN;
-			} else if (c == 'd') {
-				ReportData->LY = STICK_MAX;
-			} else if (c == 'l') {
-				ReportData->LX = STICK_MIN;
-			} else if (c == 'r') {
-				ReportData->LX = STICK_MAX;
-			} else if (c == '1') { //UL
-				ReportData->LY = STICK_MIN;
-				ReportData-> LX = STICK_MIN;
-			} else if (c == '2') { //UR
-				ReportData->LY = STICK_MIN;
-				ReportData-> LX = STICK_MAX;
-			} else if (c == '3') { //DL
-				ReportData-> LY = STICK_MAX;
-				ReportData-> LX = STICK_MIN;
-			} else if (c == '4') { //DR
-				ReportData-> LY = STICK_MAX;
-				ReportData-> LX = STICK_MAX;
-			} else if (c == 'b') {
-				state = PRESS_A;
-			} else if (c == 'y') {
-				state = PRESSY;
-			} else if (c == 'c') {
-				state = CONNECT;
+			switch (c)
+			{
+				case 'u':
+					ReportData->LY = STICK_MIN;
+					break;
+				case 'd':
+					ReportData->LY = STICK_MAX;
+					break;
+				case 'l':
+					ReportData->LX = STICK_MIN;
+					break;
+				case 'r':
+					ReportData->LX = STICK_MAX;
+					break;
+				case '1': //UL
+					ReportData->LY = STICK_MIN;
+					ReportData->LX = STICK_MIN;
+					break;
+				case '2': //UR
+					ReportData->LY = STICK_MIN;
+					ReportData->LX = STICK_MAX;
+					break;
+				case '3': //DL
+					ReportData->LY = STICK_MAX;
+					ReportData->LX = STICK_MIN;
+					break;
+				case '4': //DR
+					ReportData->LY = STICK_MAX;
+					ReportData->LX = STICK_MAX;
+					break;
+				case 'b':
+					state = PRESS_B;
+					break;
+				case 'y':
+					state = PRESS_Y;
+					break;
+				case 'c':
+					state = CONNECT;
+					break;
 			}
 
 
