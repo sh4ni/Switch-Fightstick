@@ -9,3 +9,6 @@
 *.sym
 *.eep
 LUFA/
+uart.c
+uart.h
+

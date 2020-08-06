@@ -240,7 +240,7 @@ void GetNextReport(USB_JoystickReport_Input_t* const ReportData) {
 			state = WAITUART;
 			break;
 		case HODL:
-			_delay_ms(5)
+			_delay_ms(5);
 			state = WAITUART;
 			break;
 		case WAITUART:

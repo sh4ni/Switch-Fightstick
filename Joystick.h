@@ -50,6 +50,8 @@
 #include <LUFA/Drivers/Board/Buttons.h>
 #include <LUFA/Platform/Platform.h>
 
+#include "uart.h"
+
 #include "Descriptors.h"
 
 // Type Defines
